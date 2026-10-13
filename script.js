@@ -15,7 +15,7 @@ const campaignSettings = [
 
 campaignSettings.forEach(setting => {
   const div = document.createElement("div");
-  div.classList.add("checkbox-input-pair");
+  div.classList.add("checkbox-label-pair");
   
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -30,3 +30,27 @@ campaignSettings.forEach(setting => {
   div.append(checkbox, label);
   document.getElementById("campaign-setting-checkbox-grid").append(div);
 });
+
+const gameplayEncounters = [
+  "combat",
+  "exploration",
+  "roleplay"
+];
+
+gameplayEncounters.forEach(encounter => {
+  const div = document.createElement("div");
+  div.classList.add("label-range-pair");
+  
+  const label = document.createElement("label");
+  label.setAttribute("for", `${encounter}-gameplay`);
+  label.textContent = encounter;
+
+  const range = document.createElement("input");
+  range.type = "range";
+  range.name = `${encounter}-gameplay`;
+  range.id = `${encounter}-gameplay`;
+
+  div.append(label, range);
+  document.getElementById("gameplay-balance-range-grid").append(div);
+});
+
