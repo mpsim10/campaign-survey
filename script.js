@@ -1,4 +1,4 @@
-const campaignSettings = [
+const environments = [
   "any",
   "arctic",
   "coastal", 
@@ -11,24 +11,26 @@ const campaignSettings = [
   "underdark", 
   "underwater", 
   "urban"
-]
+];
 
-campaignSettings.forEach(setting => {
+environments.forEach(setting => {
+  const container = document.getElementById("environment-checkbox-grid");
+
   const div = document.createElement("div");
   div.classList.add("checkbox-label-pair");
   
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-  checkbox.name = "campaign-setting";
-  checkbox.id = `${setting}-setting`;
-  checkbox.value = setting;
+  checkbox.name = setting;
+  checkbox.id = setting;
+  checkbox.setAttribute("autocomplete", "off");
 
   const label = document.createElement("label");
-  label.setAttribute("for", `${setting}-setting`);
+  label.setAttribute("for", setting);
   label.textContent = setting;
 
   div.append(checkbox, label);
-  document.getElementById("campaign-setting-checkbox-grid").append(div);
+  container.append(div);
 });
 
 const gameplayEncounters = [
@@ -38,6 +40,8 @@ const gameplayEncounters = [
 ];
 
 gameplayEncounters.forEach(encounter => {
+  const container = document.getElementById("encounter-balance-slider-display");
+
   const div = document.createElement("div");
   div.classList.add("label-range-pair");
   
@@ -47,21 +51,21 @@ gameplayEncounters.forEach(encounter => {
 
   const range = document.createElement("input");
   range.type = "range";
-  range.name = `${encounter}-gameplay`;
-  range.id = `${encounter}-gameplay`;
+  range.name = encounter;
+  range.id = encounter;
   range.value = 33.3;
   range.setAttribute("step", "0.1");
 
   div.append(label, range);
-  document.getElementById("gameplay-balance-range-grid").append(div);
+  container.append(div);
 });
 
-const sliderGrid = document.getElementById("gameplay-balance-range-grid");
+const sliderGrid = document.getElementById("encounter-balance-slider-display");
 const allSliders = Array.from(sliderGrid.children).map((div) => div.lastChild);
 
 sliderGrid.addEventListener("mouseup", (e) => {
   const max = 100;
-  const allValues = allSliders.map((v) => Number(v.value))
+  const allValues = allSliders.map((v) => Number(v.value));
   const total = allValues.reduce((a,b) => a + b);
   const adjustment = (max - total) / 2;
   for (let i = 0; i < allSliders.length; i++) {
@@ -70,3 +74,26 @@ sliderGrid.addEventListener("mouseup", (e) => {
     };
   };
 });
+
+const game = {
+  environments: [],
+};
+
+const form = document.getElementById("survey-form");
+form.onsubmit = (e) => {
+  e.preventDefault();
+
+  const allInputs = Array.from(document.getElementsByTagName("input"));
+  allInputs.forEach(input => {
+    if (input.type === "checkbox" && input.checked) {
+      game.environments.push(input.name);
+    } else if (input.type === "number") {
+      game[input.name] = Number(input.value);
+    } else if (input.type === "text") {
+      game[input.name] = input.value;
+    } else {
+      return;
+    };
+  });
+  console.log([game]);
+};
