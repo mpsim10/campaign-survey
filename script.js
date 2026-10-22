@@ -60,6 +60,10 @@ gameplayEncounters.forEach(encounter => {
   container.append(div);
 });
 
+document.getElementById("hill").checked = true;
+document.getElementById("mountain").checked = true;
+document.getElementById("underdark").checked = true;
+
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
 const allSliders = Array.from(sliderGrid.children).map((div) => div.lastChild);
 
@@ -108,7 +112,7 @@ difficulty.addEventListener("mouseup", (e) => {
     default:
       break;
   }
-  difficulty.textContent = text;
+  description.textContent = text;
 });
 
 const form = document.getElementById("survey-form");
