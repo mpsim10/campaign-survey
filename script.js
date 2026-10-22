@@ -115,21 +115,47 @@ difficulty.addEventListener("input", (e) => {
   description.textContent = text;
 });
 
-const form = document.getElementById("survey-form");
+const mechanics = [
+  "spell-components",
+  "weight-encumberance",
+  "exhaustion",
+  "spell-slots"
+];
+
+mechanics.forEach((mechanic, i) => {
+
+  const fieldset = document.createElement("fieldset");
+  const legend = document.createElement("legend");
+  legend.textContent = `${mechanic.split("-").join(" ")}`;
+  fieldset.append(legend);
+
+  const options = ["yes", "no"];
+
+  options.forEach(option => {    
+    const label = document.createElement("label");
+    label.setAttribute("for", option);
+    label.textContent = `${option.charAt(0)}`;
+    
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = option;
+    input.name = mechanic;
+    input.value = option;
+
+    label.append(input);
+    fieldset.append(label);
+  });
+
+  document.getElementById("mechanics-fieldset").append(fieldset);
+});
+
+const form = document.forms["survey-form"];
 form.onsubmit = (e) => {
   e.preventDefault();
-
-  const allInputs = Array.from(document.getElementsByTagName("input"));
-  allInputs.forEach(input => {
-    if (input.type === "checkbox" && input.checked) {
-      game.environments.push(input.name);
-    } else if (input.type === "number" || input.type === "range") {
-      game[input.name] = Number(input.value);
-    } else if (input.type === "text") {
-      game[input.name] = input.value;
-    } else {
-      return;
-    };
-  });
-  console.log([game]);
+  const formData = new FormData(form);
+  for (const p of formData) {
+    const name = p[0];
+    const value = p[1];
+    console.log(name, value);
+  };
 };
