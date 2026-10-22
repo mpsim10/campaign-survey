@@ -67,7 +67,7 @@ document.getElementById("underdark").checked = true;
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
 const allSliders = Array.from(sliderGrid.children).map((div) => div.lastChild);
 
-sliderGrid.addEventListener("mouseup", (e) => {
+sliderGrid.addEventListener("input", (e) => {
   const max = 100;
   const allValues = allSliders.map((v) => Number(v.value));
   const total = allValues.reduce((a,b) => a + b);
@@ -85,7 +85,7 @@ const game = {
 
 const difficulty = document.getElementById("difficulty");
 const description = document.getElementById("difficulty-description");
-difficulty.addEventListener("mouseup", (e) => {
+difficulty.addEventListener("input", (e) => {
   let text;
   switch (e.target.value) {
     case "1":
