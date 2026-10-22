@@ -8,14 +8,9 @@
   </head>
   <body>
     <form action="results.html" method="get" id="survey-form">
-      <label for="session-length">session length (hours):
-        <input type="number" id="session-length" name="session-length" min="2" max="8" step="0.5" value="6"></input> hours
-      </label>
-      <br>
-      <label for="player-count">player count:
-        <input type="number" id="player-count" name="player-count" min="2" max="6" step="1" value="4"> players
-      </label>
-      <br>
+      <fieldset id="details-fieldset">
+        <legend>details</legend>
+      </fieldset>
       <fieldset id="environment-fieldset">
         <legend>environments</legend>
         <div id="environment-checkbox-grid"></div>

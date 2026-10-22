@@ -1,3 +1,32 @@
+const inputBuilder = {
+  number(name, min, max, step, defaultValue, labelText) {
+    const label = document.createElement("label");
+    
+    label["for"] = name;
+    label.textContent = labelText ? labelText : name.split("-").join(" ");
+    
+    const input = document.createElement("input");
+    input.type = "number";
+    input.name = name;
+    input.id = name;
+    input.min = min;
+    input.max = max;
+    input.step = step;
+    input.value = defaultValue;
+
+    label.append(input);
+    return label;
+  }
+};
+
+const form = document.forms["survey-form"];
+
+const sessionLength = inputBuilder.number("session-length", 2, 8, 0.5, 3, "session length (hours)");
+const playerCount = inputBuilder.number("player-count", 2, 6, 1, 4);
+const partyLevel = inputBuilder.number("party-level", 1, 20, 1, 6);
+
+document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel);
+
 const environments = [
   "any",
   "arctic",
@@ -23,7 +52,6 @@ environments.forEach(setting => {
   checkbox.type = "checkbox";
   checkbox.name = setting;
   checkbox.id = setting;
-  checkbox.setAttribute("autocomplete", "off");
 
   const label = document.createElement("label");
   label.setAttribute("for", setting);
@@ -149,7 +177,6 @@ mechanics.forEach((mechanic, i) => {
   document.getElementById("mechanics-fieldset").append(fieldset);
 });
 
-const form = document.forms["survey-form"];
 form.onsubmit = (e) => {
   e.preventDefault();
   const formData = new FormData(form);
