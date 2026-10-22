@@ -79,6 +79,38 @@ const game = {
   environments: [],
 };
 
+const difficulty = document.getElementById("difficulty");
+const description = document.getElementById("difficulty-description");
+difficulty.addEventListener("mouseup", (e) => {
+  let text;
+  switch (e.target.value) {
+    case "1":
+      text = "a lovely stroll through town";
+      break;
+    case "2":
+      text = "some bumps and bruises, but nothing to worry about";
+      break;
+    case "3":
+      text = "time to break out the health potions";
+      break;      
+    case "4":
+      text = "barring a series of bad choices, everyone survives";
+      break;      
+    case "5":
+      text = "uncertain whether everyone will make it";
+      break;      
+    case "6":
+      text = "at least one character will likely die";
+      break;      
+    case "7":
+      text = "everybody dies, and that's the point";
+      break;      
+    default:
+      break;
+  }
+  difficulty.textContent = text;
+});
+
 const form = document.getElementById("survey-form");
 form.onsubmit = (e) => {
   e.preventDefault();
@@ -87,7 +119,7 @@ form.onsubmit = (e) => {
   allInputs.forEach(input => {
     if (input.type === "checkbox" && input.checked) {
       game.environments.push(input.name);
-    } else if (input.type === "number") {
+    } else if (input.type === "number" || input.type === "range") {
       game[input.name] = Number(input.value);
     } else if (input.type === "text") {
       game[input.name] = input.value;
