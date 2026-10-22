@@ -33,6 +33,10 @@ environments.forEach(setting => {
   container.append(div);
 });
 
+document.getElementById("hill").checked = true;
+document.getElementById("mountain").checked = true;
+document.getElementById("underdark").checked = true;
+
 const gameplayEncounters = [
   "combat",
   "exploration",
@@ -53,22 +57,18 @@ gameplayEncounters.forEach(encounter => {
   range.type = "range";
   range.name = encounter;
   range.id = encounter;
-  range.value = 33.3;
-  range.setAttribute("step", "0.1");
+  range.value = 33;
+  range.setAttribute("step", "1");
 
   div.append(label, range);
   container.append(div);
 });
 
-document.getElementById("hill").checked = true;
-document.getElementById("mountain").checked = true;
-document.getElementById("underdark").checked = true;
-
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
 const allSliders = Array.from(sliderGrid.children).map((div) => div.lastChild);
 
 sliderGrid.addEventListener("input", (e) => {
-  const max = 100;
+  const max = 99;
   const allValues = allSliders.map((v) => Number(v.value));
   const total = allValues.reduce((a,b) => a + b);
   const adjustment = (max - total) / 2;
