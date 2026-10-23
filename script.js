@@ -1,10 +1,11 @@
-const inputBuilder = {
-  number(name, min, max, step, defaultValue, labelText) {
+const inputElements = {
+  label(str, labelText) {
     const label = document.createElement("label");
-    
-    label["for"] = name;
-    label.textContent = labelText ? labelText : name.split("-").join(" ");
-    
+    label["for"] = str;
+    label.textContent = labelText ? labelText : str.split("-").join(" ");
+    return label;
+  },
+  number(name, min, max, step, defaultValue) {
     const input = document.createElement("input");
     input.type = "number";
     input.name = name;
@@ -13,17 +14,26 @@ const inputBuilder = {
     input.max = max;
     input.step = step;
     input.value = defaultValue;
-
-    label.append(input);
-    return label;
+    return input;
   }
 };
 
+const labeledInput = {
+  number(name, min, max, step, defaultValue, labelText) {
+    const label = inputElements.label(name, labelText);
+    const input = inputElements.number(name, min, max, step, defaultValue);
+    label.append(input);
+    return label;
+  }
+}
+
 const form = document.forms["survey-form"];
 
-const sessionLength = inputBuilder.number("session-length", 2, 8, 0.5, 3, "session length (hours)");
-const playerCount = inputBuilder.number("player-count", 2, 6, 1, 4);
-const partyLevel = inputBuilder.number("party-level", 1, 20, 1, 6);
+// const sessionLength = inputBuilder.number("session-length", 2, 8, 0.5, 3);
+// const playerCount = inputBuilder.number("player-count", 2, 6, 1, 4);
+// const partyLevel = inputBuilder.number("party-level", 1, 20, 1, 6);
+
+const difficultyLevels = ["easy", "medium", "hard", "deadly"];
 
 document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel);
 
@@ -111,37 +121,37 @@ const game = {
   environments: [],
 };
 
-const difficulty = document.getElementById("difficulty");
-const description = document.getElementById("difficulty-description");
-difficulty.addEventListener("input", (e) => {
-  let text;
-  switch (e.target.value) {
-    case "1":
-      text = "a lovely stroll through town";
-      break;
-    case "2":
-      text = "some bumps and bruises, but nothing to worry about";
-      break;
-    case "3":
-      text = "time to break out the health potions";
-      break;      
-    case "4":
-      text = "barring a series of bad choices, everyone survives";
-      break;      
-    case "5":
-      text = "uncertain whether everyone will make it";
-      break;      
-    case "6":
-      text = "at least one character will likely die";
-      break;      
-    case "7":
-      text = "everybody dies, and that's the point";
-      break;      
-    default:
-      break;
-  }
-  description.textContent = text;
-});
+// const difficulty = document.getElementById("difficulty");
+// const description = document.getElementById("difficulty-description");
+// difficulty.addEventListener("input", (e) => {
+//   let text;
+//   switch (e.target.value) {
+//     case "1":
+//       text = "a lovely stroll through town";
+//       break;
+//     case "2":
+//       text = "some bumps and bruises, but nothing to worry about";
+//       break;
+//     case "3":
+//       text = "time to break out the health potions";
+//       break;      
+//     case "4":
+//       text = "barring a series of bad choices, everyone survives";
+//       break;      
+//     case "5":
+//       text = "uncertain whether everyone will make it";
+//       break;      
+//     case "6":
+//       text = "at least one character will likely die";
+//       break;      
+//     case "7":
+//       text = "everybody dies, and that's the point";
+//       break;      
+//     default:
+//       break;
+//   }
+//   description.textContent = text;
+// });
 
 const mechanics = [
   "spell-components",
