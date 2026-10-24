@@ -1,4 +1,6 @@
-const inputElement = {
+const form = document.forms["survey-form"];
+
+const input = {
 
   label(str, labelText) {
     const label = document.createElement("label");
@@ -43,7 +45,7 @@ const inputElement = {
   }
 };
 
-const labeledInput = (input, labelText) => {
+const labeled = (input, labelText) => {
   const label = document.createElement("label");
   const name = input["name"];
   label["for"] = name;
@@ -56,11 +58,36 @@ const labeledInput = (input, labelText) => {
   return label;
 };
 
-const form = document.forms["survey-form"];
+const fieldsetWithLegend = (id, legendText) => {
+  const fieldset = document.createElement("fieldset");
+  const legend = document.createElement("legend");
+  fieldset.id = id;
+  legend.textContent = legendText ? legendText : id.split("-").join(" ");
+  fieldset.append(legend);
+  return fieldset;
+};
 
-const sessionLength = labeledInput(inputElement.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
-const playerCount = labeledInput(inputElement.number("player-count", 2, 6, 1, 4));
-const partyLevel = labeledInput(inputElement.number("party-level", 1, 20, 1, 6));
+const radioSet = (arr, id, legendText) => {
+  const options = arr;
+  const fieldset = fieldsetWithLegend(id, legendText);
+  options.forEach(option => {
+    const radio = labeled(input.radio(id, option));
+    fieldset.append(radio);
+  });
+  return fieldset;
+};
+
+const detailsSection = () => {
+  const fieldset = fieldsetWithLegend("game-details");
+  const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
+  const playerCount = labeled(input.number("player-count", 2, 6, 1, 4));
+  const partyLevel = labeled(input.number("party-level", 1, 20, 1, 6));
+  const difficultyLevel = radioSet(["easy", "medium", "hard", "deadly"], "difficulty-level");
+  fieldset.append(sessionLength, playerCount, partyLevel, difficultyLevel)
+  return fieldset;
+};
+
+form.insertBefore(detailsSection(), form.firstChild);
 
 const difficultyFieldset = document.createElement("fieldset");
 const difficultyLegend = document.createElement("legend");
@@ -68,10 +95,10 @@ difficultyLegend.textContent = "difficulty level";
 difficultyFieldset.append(difficultyLegend);
 const difficultyLevels = ["easy", "medium", "hard", "deadly"];
 difficultyLevels.forEach(level => {
-  difficultyFieldset.append(labeledInput(inputElement.radio("difficulty", level)));
+  difficultyFieldset.append(labeled(input.radio("difficulty", level)));
 });
 
-document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel, difficultyFieldset);
+// document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel, difficultyFieldset);
 
 const environments = [
   "any",
@@ -90,7 +117,7 @@ const environments = [
 
 environments.forEach(setting => {
   const container = document.getElementById("environment-checkbox-grid");
-  container.append(labeledInput(inputElement.checkbox(setting)));
+  container.append(labeled(input.checkbox(setting)));
 });
 
 const gameplayEncounters = [
@@ -101,7 +128,7 @@ const gameplayEncounters = [
 
 gameplayEncounters.forEach(encounter => {
   const container = document.getElementById("encounter-balance-slider-display");
-  container.append(labeledInput(inputElement.range(encounter, 1, 33)));
+  container.append(labeled(input.range(encounter, 1, 33)));
 });
 
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
@@ -126,7 +153,7 @@ const mechanics = [
   "spell-slots"
 ];
 
-mechanics.forEach((mechanic, i) => {
+mechanics.forEach((mechanic) => {
   const fieldset = document.createElement("fieldset");
   const legend = document.createElement("legend");
   legend.textContent = `${mechanic.split("-").join(" ")}`;
@@ -135,7 +162,7 @@ mechanics.forEach((mechanic, i) => {
   const options = ["yes", "no"];
 
   options.forEach(option => {
-    fieldset.append(labeledInput(inputElement.radio(mechanic, option, option.charAt(0))));
+    fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
   });
 
   document.getElementById("mechanics-fieldset").append(fieldset);
