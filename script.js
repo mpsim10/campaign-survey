@@ -31,6 +31,15 @@ const inputElements = {
     checkbox.name = name;
     checkbox.id = name;
     return checkbox;
+  },
+  range(name, step, defaultValue) {    
+    const range = document.createElement("input");
+    range.type = "range";
+    range.name = name;
+    range.id = name;
+    range.value = defaultValue;
+    range.setAttribute("step", step);
+    return range;
   }
 };
 
@@ -52,7 +61,14 @@ const labeledInput = {
     const checkbox = inputElements.checkbox(name);
     label.insertBefore(checkbox, label.lastChild);
     return label;
+  },
+  range(name, step, defaultValue, labelText) {
+    const label = inputElements.label(name, labelText);
+    const range = inputElements.range(name, step, defaultValue);
+    label.append(range);
+    return label;
   }
+
 };
 
 const form = document.forms["survey-form"];
@@ -89,25 +105,7 @@ const environments = [
 
 environments.forEach(setting => {
   const container = document.getElementById("environment-checkbox-grid");
-
-  const checkbox = labeledInput.checkbox(setting);
-
-  container.append(checkbox);
-
-  // const div = document.createElement("div");
-  // div.classList.add("checkbox-label-pair");
-  
-  // const checkbox = document.createElement("input");
-  // checkbox.type = "checkbox";
-  // checkbox.name = setting;
-  // checkbox.id = setting;
-
-  // const label = document.createElement("label");
-  // label.setAttribute("for", setting);
-  // label.textContent = setting;
-
-  // div.append(checkbox, label);
-  // container.append(div);
+  container.append(labeledInput.checkbox(setting));
 });
 
 const gameplayEncounters = [
@@ -118,23 +116,7 @@ const gameplayEncounters = [
 
 gameplayEncounters.forEach(encounter => {
   const container = document.getElementById("encounter-balance-slider-display");
-
-  const div = document.createElement("div");
-  div.classList.add("label-range-pair");
-  
-  const label = document.createElement("label");
-  label.setAttribute("for", `${encounter}-gameplay`);
-  label.textContent = encounter;
-
-  const range = document.createElement("input");
-  range.type = "range";
-  range.name = encounter;
-  range.id = encounter;
-  range.value = 33;
-  range.setAttribute("step", "1");
-
-  div.append(label, range);
-  container.append(div);
+  container.append(labeledInput.range(encounter, 1, 33));
 });
 
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
