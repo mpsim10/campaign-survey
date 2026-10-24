@@ -1,4 +1,4 @@
-const inputElements = {
+const inputElement = {
 
   label(str, labelText) {
     const label = document.createElement("label");
@@ -43,39 +43,24 @@ const inputElements = {
   }
 };
 
-const labeledInput = {
-  number(name, min, max, step, defaultValue, labelText) {
-    const label = inputElements.label(name, labelText);
-    const number = inputElements.number(name, min, max, step, defaultValue);
-    label.append(number);
-    return label;
-  },
-  radio(name, value, labelText) {
-    const label = inputElements.label(value, labelText);
-    const radio = inputElements.radio(name, value);
-    label.insertBefore(radio, label.lastChild);
-    return label;
-  },
-  checkbox(name, labelText) {
-    const label = inputElements.label(name, labelText);
-    const checkbox = inputElements.checkbox(name);
-    label.insertBefore(checkbox, label.lastChild);
-    return label;
-  },
-  range(name, step, defaultValue, labelText) {
-    const label = inputElements.label(name, labelText);
-    const range = inputElements.range(name, step, defaultValue);
-    label.append(range);
-    return label;
-  }
-
+const labeledInput = (input, labelText) => {
+  const label = document.createElement("label");
+  const name = input["name"];
+  label["for"] = name;
+  label.textContent = labelText ? labelText : input["type"] === "radio" ? input["value"] : name.split("-").join(" ");
+  if (input["type"] === "radio" || input["type"] === "checkbox") {
+    label.insertBefore(input, label.lastChild);
+  } else {
+    label.append(input);
+  };
+  return label;
 };
 
 const form = document.forms["survey-form"];
 
-const sessionLength = labeledInput.number("session-length", 2, 8, 0.5, 3, "session length (hours)");
-const playerCount = labeledInput.number("player-count", 2, 6, 1, 4);
-const partyLevel = labeledInput.number("party-level", 1, 20, 1, 6);
+const sessionLength = labeledInput(inputElement.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
+const playerCount = labeledInput(inputElement.number("player-count", 2, 6, 1, 4));
+const partyLevel = labeledInput(inputElement.number("party-level", 1, 20, 1, 6));
 
 const difficultyFieldset = document.createElement("fieldset");
 const difficultyLegend = document.createElement("legend");
@@ -83,7 +68,7 @@ difficultyLegend.textContent = "difficulty level";
 difficultyFieldset.append(difficultyLegend);
 const difficultyLevels = ["easy", "medium", "hard", "deadly"];
 difficultyLevels.forEach(level => {
-  difficultyFieldset.append(labeledInput.radio("difficulty", level));
+  difficultyFieldset.append(labeledInput(inputElement.radio("difficulty", level)));
 });
 
 document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel, difficultyFieldset);
@@ -105,7 +90,7 @@ const environments = [
 
 environments.forEach(setting => {
   const container = document.getElementById("environment-checkbox-grid");
-  container.append(labeledInput.checkbox(setting));
+  container.append(labeledInput(inputElement.checkbox(setting)));
 });
 
 const gameplayEncounters = [
@@ -116,7 +101,7 @@ const gameplayEncounters = [
 
 gameplayEncounters.forEach(encounter => {
   const container = document.getElementById("encounter-balance-slider-display");
-  container.append(labeledInput.range(encounter, 1, 33));
+  container.append(labeledInput(inputElement.range(encounter, 1, 33)));
 });
 
 const sliderGrid = document.getElementById("encounter-balance-slider-display");
@@ -150,7 +135,7 @@ mechanics.forEach((mechanic, i) => {
   const options = ["yes", "no"];
 
   options.forEach(option => {
-    fieldset.append(labeledInput.radio(mechanic, option, option.charAt(0)));
+    fieldset.append(labeledInput(inputElement.radio(mechanic, option, option.charAt(0))));
   });
 
   document.getElementById("mechanics-fieldset").append(fieldset);
