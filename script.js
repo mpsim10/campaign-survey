@@ -1,4 +1,5 @@
 const inputElements = {
+
   label(str, labelText) {
     const label = document.createElement("label");
     label["for"] = str;
@@ -92,10 +93,6 @@ environments.forEach(setting => {
   container.append(div);
 });
 
-document.getElementById("hill").checked = true;
-document.getElementById("mountain").checked = true;
-document.getElementById("underdark").checked = true;
-
 const gameplayEncounters = [
   "combat",
   "exploration",
@@ -137,42 +134,6 @@ sliderGrid.addEventListener("input", (e) => {
     };
   };
 });
-
-const game = {
-  environments: [],
-};
-
-// const difficulty = document.getElementById("difficulty");
-// const description = document.getElementById("difficulty-description");
-// difficulty.addEventListener("input", (e) => {
-//   let text;
-//   switch (e.target.value) {
-//     case "1":
-//       text = "a lovely stroll through town";
-//       break;
-//     case "2":
-//       text = "some bumps and bruises, but nothing to worry about";
-//       break;
-//     case "3":
-//       text = "time to break out the health potions";
-//       break;      
-//     case "4":
-//       text = "barring a series of bad choices, everyone survives";
-//       break;      
-//     case "5":
-//       text = "uncertain whether everyone will make it";
-//       break;      
-//     case "6":
-//       text = "at least one character will likely die";
-//       break;      
-//     case "7":
-//       text = "everybody dies, and that's the point";
-//       break;      
-//     default:
-//       break;
-//   }
-//   description.textContent = text;
-// });
 
 const mechanics = [
   "spell-components",
