@@ -87,38 +87,14 @@ const detailsSection = () => {
   return fieldset;
 };
 
-form.insertBefore(detailsSection(), form.firstChild);
+const environmentsSection = () => {
+  const fieldset = fieldsetWithLegend("environments");
+  const environments = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
+  environments.forEach(setting => {fieldset.append(labeled(input.checkbox(setting)))});
+  return fieldset;
+};
 
-const difficultyFieldset = document.createElement("fieldset");
-const difficultyLegend = document.createElement("legend");
-difficultyLegend.textContent = "difficulty level";
-difficultyFieldset.append(difficultyLegend);
-const difficultyLevels = ["easy", "medium", "hard", "deadly"];
-difficultyLevels.forEach(level => {
-  difficultyFieldset.append(labeled(input.radio("difficulty", level)));
-});
-
-// document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel, difficultyFieldset);
-
-const environments = [
-  "any",
-  "arctic",
-  "coastal", 
-  "desert",
-  "forest",
-  "grassland", 
-  "hill",
-  "mountain", 
-  "swamp",
-  "underdark", 
-  "underwater", 
-  "urban"
-];
-
-environments.forEach(setting => {
-  const container = document.getElementById("environment-checkbox-grid");
-  container.append(labeled(input.checkbox(setting)));
-});
+form.append(detailsSection(), environmentsSection());
 
 const gameplayEncounters = [
   "combat",
