@@ -15,6 +15,14 @@ const inputElements = {
     input.step = step;
     input.value = defaultValue;
     return input;
+  },
+  radio(name, value) {
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = name;
+    input.id = value;
+    input.value = value;
+    return input;
   }
 };
 
@@ -24,18 +32,31 @@ const labeledInput = {
     const input = inputElements.number(name, min, max, step, defaultValue);
     label.append(input);
     return label;
+  },
+  radio(name, value, labelText) {
+    const label = inputElements.label(value, labelText);
+    const input = inputElements.radio(name, value);
+    label.append(input);
+    return label;    
   }
 }
 
 const form = document.forms["survey-form"];
 
-// const sessionLength = inputBuilder.number("session-length", 2, 8, 0.5, 3);
-// const playerCount = inputBuilder.number("player-count", 2, 6, 1, 4);
-// const partyLevel = inputBuilder.number("party-level", 1, 20, 1, 6);
+const sessionLength = labeledInput.number("session-length", 2, 8, 0.5, 3, "session length (hours)");
+const playerCount = labeledInput.number("player-count", 2, 6, 1, 4);
+const partyLevel = labeledInput.number("party-level", 1, 20, 1, 6);
 
+const difficultyFieldset = document.createElement("fieldset");
+const difficultyLegend = document.createElement("legend");
+difficultyLegend.textContent = "difficulty level";
+difficultyFieldset.append(difficultyLegend);
 const difficultyLevels = ["easy", "medium", "hard", "deadly"];
+difficultyLevels.forEach(level => {
+  difficultyFieldset.append(labeledInput.radio("difficulty", level));
+});
 
-document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel);
+document.getElementById("details-fieldset").append(sessionLength, playerCount, partyLevel, difficultyFieldset);
 
 const environments = [
   "any",
@@ -161,7 +182,6 @@ const mechanics = [
 ];
 
 mechanics.forEach((mechanic, i) => {
-
   const fieldset = document.createElement("fieldset");
   const legend = document.createElement("legend");
   legend.textContent = `${mechanic.split("-").join(" ")}`;
@@ -169,19 +189,8 @@ mechanics.forEach((mechanic, i) => {
 
   const options = ["yes", "no"];
 
-  options.forEach(option => {    
-    const label = document.createElement("label");
-    label.setAttribute("for", option);
-    label.textContent = `${option.charAt(0)}`;
-    
-    const input = document.createElement("input");
-    input.type = "radio";
-    input.id = option;
-    input.name = mechanic;
-    input.value = option;
-
-    label.append(input);
-    fieldset.append(label);
+  options.forEach(option => {
+    fieldset.append(labeledInput.radio(mechanic, option, option.charAt(0)));
   });
 
   document.getElementById("mechanics-fieldset").append(fieldset);
