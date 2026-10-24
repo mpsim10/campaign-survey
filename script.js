@@ -7,40 +7,53 @@ const inputElements = {
     return label;
   },
   number(name, min, max, step, defaultValue) {
-    const input = document.createElement("input");
-    input.type = "number";
-    input.name = name;
-    input.id = name;
-    input.min = min;
-    input.max = max;
-    input.step = step;
-    input.value = defaultValue;
-    return input;
+    const number = document.createElement("input");
+    number.type = "number";
+    number.name = name;
+    number.id = name;
+    number.min = min;
+    number.max = max;
+    number.step = step;
+    number.value = defaultValue;
+    return number;
   },
   radio(name, value) {
-    const input = document.createElement("input");
-    input.type = "radio";
-    input.name = name;
-    input.id = value;
-    input.value = value;
-    return input;
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = name;
+    radio.id = value;
+    radio.value = value;
+    return radio;
+  },
+  checkbox(name) {
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = name;
+    checkbox.id = name;
+    return checkbox;
   }
 };
 
 const labeledInput = {
   number(name, min, max, step, defaultValue, labelText) {
     const label = inputElements.label(name, labelText);
-    const input = inputElements.number(name, min, max, step, defaultValue);
-    label.append(input);
+    const number = inputElements.number(name, min, max, step, defaultValue);
+    label.append(number);
     return label;
   },
   radio(name, value, labelText) {
     const label = inputElements.label(value, labelText);
-    const input = inputElements.radio(name, value);
-    label.append(input);
-    return label;    
+    const radio = inputElements.radio(name, value);
+    label.insertBefore(radio, label.lastChild);
+    return label;
+  },
+  checkbox(name, labelText) {
+    const label = inputElements.label(name, labelText);
+    const checkbox = inputElements.checkbox(name);
+    label.insertBefore(checkbox, label.lastChild);
+    return label;
   }
-}
+};
 
 const form = document.forms["survey-form"];
 
@@ -77,20 +90,24 @@ const environments = [
 environments.forEach(setting => {
   const container = document.getElementById("environment-checkbox-grid");
 
-  const div = document.createElement("div");
-  div.classList.add("checkbox-label-pair");
+  const checkbox = labeledInput.checkbox(setting);
+
+  container.append(checkbox);
+
+  // const div = document.createElement("div");
+  // div.classList.add("checkbox-label-pair");
   
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.name = setting;
-  checkbox.id = setting;
+  // const checkbox = document.createElement("input");
+  // checkbox.type = "checkbox";
+  // checkbox.name = setting;
+  // checkbox.id = setting;
 
-  const label = document.createElement("label");
-  label.setAttribute("for", setting);
-  label.textContent = setting;
+  // const label = document.createElement("label");
+  // label.setAttribute("for", setting);
+  // label.textContent = setting;
 
-  div.append(checkbox, label);
-  container.append(div);
+  // div.append(checkbox, label);
+  // container.append(div);
 });
 
 const gameplayEncounters = [
