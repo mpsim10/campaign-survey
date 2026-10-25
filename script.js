@@ -49,7 +49,7 @@ const labeled = (input, labelText) => {
   const label = document.createElement("label");
   const name = input["name"];
   label["for"] = name;
-  label.textContent = labelText ? labelText : input["type"] === "radio" ? input["value"] : name.split("-").join(" ");
+  label.textContent = labelText ? labelText : input["type"] === "radio" ? input["value"].split("-").join(" ") : name.split("-").join(" ");
   if (input["type"] === "radio" || input["type"] === "checkbox") {
     label.insertBefore(input, label.lastChild);
   } else {
@@ -134,16 +134,16 @@ const section = {
       "modern-technology"
     ];
 
-    mechanics.forEach((mechanic) => {
-      const fieldset = fieldsetWithLegend(mechanic);
-      const options = ["yes", "no"];
-      options.forEach(option => {
-        fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
-      });
+    const fieldset = radioSet(mechanics, "game-mechanics");
 
-  document.getElementById("mechanics-fieldset").append(fieldset);
-});
-
+    // mechanics.forEach((mechanic) => {
+      // const radioFieldset = fieldsetWithLegend(mechanic);
+      // const options = ["yes", "no"];
+      // options.forEach(option => {
+      //   radioFieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
+      // });  
+    // });
+    return fieldset;
   }
 };
 
@@ -189,7 +189,7 @@ const section = {
 //   };
 // });
 
-form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance());
+form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics());
 
 const mechanics = [
   "spell-components",
