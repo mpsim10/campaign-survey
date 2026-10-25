@@ -143,6 +143,13 @@ const section = {
   }
 };
 
+const submitButton = () => {
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.innerText = "submit";
+  return button;
+};
+
 // const detailsSection = () => {
 //   const fieldset = fieldsetWithLegend("game-details");
 //   const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
@@ -185,7 +192,7 @@ const section = {
 //   };
 // });
 
-form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics());
+form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics(), submitButton());
 
 // const mechanics = [
 //   "spell-components",
