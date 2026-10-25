@@ -99,12 +99,8 @@ const section = {
     return fieldset;
   },
   campaignSettings: () => {
-    const fieldset = fieldsetWithLegend("campaign-settings", "campaign settings (select any of interest)");
     const settings = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
-    settings.forEach(setting => {
-      fieldset.append(labeled(input.checkbox(setting)));
-    });
-    return fieldset;
+    return checkboxSet(settings, "campaign-settings", "campaign settings (select any of interest)");
   },
   encounterBalance: () => {
     const fieldset = fieldsetWithLegend("encounter-balance");
@@ -136,13 +132,16 @@ const section = {
       "interplanar-travel",
       "modern-technology"
     ];
-    const options = ["yes", "no"];
 
-    const fieldset = fieldsetWithLegend("game-mechanics");
-    mechanics.forEach((mechanic) => {
-      fieldset.append(radioSet(options, mechanic));
-    });
-    return fieldset;
+    return checkboxSet(mechanics, "game-mechanics");
+
+    // const options = ["yes", "no"];
+
+    // const fieldset = fieldsetWithLegend("game-mechanics");
+    // mechanics.forEach((mechanic) => {
+    //   fieldset.append(radioSet(options, mechanic));
+    // });
+    // return fieldset;
   }
 };
 
