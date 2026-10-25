@@ -133,16 +133,12 @@ const section = {
       "interplanar-travel",
       "modern-technology"
     ];
+    const options = ["yes", "no"];
 
-    const fieldset = radioSet(mechanics, "game-mechanics");
-
-    // mechanics.forEach((mechanic) => {
-      // const radioFieldset = fieldsetWithLegend(mechanic);
-      // const options = ["yes", "no"];
-      // options.forEach(option => {
-      //   radioFieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
-      // });  
-    // });
+    const fieldset = fieldsetWithLegend("game-mechanics");
+    mechanics.forEach((mechanic) => {
+      fieldset.append(radioSet(options, mechanic));
+    });
     return fieldset;
   }
 };
@@ -191,28 +187,28 @@ const section = {
 
 form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics());
 
-const mechanics = [
-  "spell-components",
-  "weight-encumberance",
-  "exhaustion",
-  "spell-slots",
-  "interplanar-travel"
-];
+// const mechanics = [
+//   "spell-components",
+//   "weight-encumberance",
+//   "exhaustion",
+//   "spell-slots",
+//   "interplanar-travel"
+// ];
 
-mechanics.forEach((mechanic) => {
-  const fieldset = document.createElement("fieldset");
-  const legend = document.createElement("legend");
-  legend.textContent = `${mechanic.split("-").join(" ")}`;
-  fieldset.append(legend);
+// mechanics.forEach((mechanic) => {
+//   const fieldset = document.createElement("fieldset");
+//   const legend = document.createElement("legend");
+//   legend.textContent = `${mechanic.split("-").join(" ")}`;
+//   fieldset.append(legend);
 
-  const options = ["yes", "no"];
+//   const options = ["yes", "no"];
 
-  options.forEach(option => {
-    fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
-  });
+//   options.forEach(option => {
+//     fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
+//   });
 
-  document.getElementById("mechanics-fieldset").append(fieldset);
-});
+//   document.getElementById("mechanics-fieldset").append(fieldset);
+// });
 
 form.onsubmit = (e) => {
   e.preventDefault();
