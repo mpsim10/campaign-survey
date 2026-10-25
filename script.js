@@ -1,4 +1,7 @@
-const form = document.forms["survey-form"];
+// const form = document.forms["survey-form"];
+
+const form = document.createElement("form");
+form.id = "survey-form";
 
 const input = {
 
@@ -150,72 +153,9 @@ const submitButton = () => {
   return button;
 };
 
-// const detailsSection = () => {
-//   const fieldset = fieldsetWithLegend("game-details");
-//   const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
-//   const playerCount = labeled(input.number("player-count", 2, 6, 1, 4));
-//   const partyLevel = labeled(input.number("party-level", 1, 20, 1, 6));
-//   const difficultyLevel = radioSet(["easy", "medium", "hard", "deadly"], "difficulty-level");
-//   fieldset.append(sessionLength, playerCount, partyLevel, difficultyLevel)
-//   return fieldset;
-// };
-
-// const environmentsSection = () => {
-//   const fieldset = fieldsetWithLegend("environments");
-//   const environments = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
-//   environments.forEach(setting => {fieldset.append(labeled(input.checkbox(setting)))});
-//   return fieldset;
-// };
-
-// const encountersSection = () => {
-//   const fieldset = fieldsetWithLegend("encounter-balance");
-//   const encounters = ["combat", "exploration", "roleplay"];
-//   encounters.forEach(encounter => {
-//     const range = input.range(encounter, 1, Math.floor(100 / encounters.length));
-//     fieldset.append(labeled(range));
-//   });
-//   return fieldset;
-// };
-
-// const encounters = encountersSection();
-
-// encounters.addEventListener("input", (e) => {
-//   const allRanges = Array.from(encounters.querySelectorAll("input"));
-//   const rangeCount = allRanges.length;
-//   const totalValue = allRanges.map((v) => Number(v.value)).reduce((a,b) => a + b);
-//   const maxValue = Math.floor(100 / rangeCount) * rangeCount;
-//   const adjustment = Math.round(maxValue - totalValue) / (rangeCount - 1);
-//   for (let i = 0; i < rangeCount; i++) {
-//     if (i !== allRanges.indexOf(e.target)) {
-//       allRanges[i].value = Number(allRanges[i].value) + adjustment;
-//     };
-//   };
-// });
-
 form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics(), submitButton());
 
-// const mechanics = [
-//   "spell-components",
-//   "weight-encumberance",
-//   "exhaustion",
-//   "spell-slots",
-//   "interplanar-travel"
-// ];
-
-// mechanics.forEach((mechanic) => {
-//   const fieldset = document.createElement("fieldset");
-//   const legend = document.createElement("legend");
-//   legend.textContent = `${mechanic.split("-").join(" ")}`;
-//   fieldset.append(legend);
-
-//   const options = ["yes", "no"];
-
-//   options.forEach(option => {
-//     fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
-//   });
-
-//   document.getElementById("mechanics-fieldset").append(fieldset);
-// });
+document.body.append(form);
 
 form.onsubmit = (e) => {
   e.preventDefault();
