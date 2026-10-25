@@ -71,62 +71,132 @@ const radioSet = (arr, id, legendText) => {
   const options = arr;
   const fieldset = fieldsetWithLegend(id, legendText);
   options.forEach(option => {
-    const radio = labeled(input.radio(id, option));
-    fieldset.append(radio);
+    fieldset.append(labeled(input.radio(id, option)));
   });
   return fieldset;
 };
 
-const detailsSection = () => {
-  const fieldset = fieldsetWithLegend("game-details");
-  const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
-  const playerCount = labeled(input.number("player-count", 2, 6, 1, 4));
-  const partyLevel = labeled(input.number("party-level", 1, 20, 1, 6));
-  const difficultyLevel = radioSet(["easy", "medium", "hard", "deadly"], "difficulty-level");
-  fieldset.append(sessionLength, playerCount, partyLevel, difficultyLevel)
+const checkboxSet = (arr, id, legendText) => {
+  const options = arr;
+  const fieldset = fieldsetWithLegend(id, legendText);
+  options.forEach(option => {
+    fieldset.append(labeled(input.checkbox(option)));
+  });
   return fieldset;
 };
 
-const environmentsSection = () => {
-  const fieldset = fieldsetWithLegend("environments");
-  const environments = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
-  environments.forEach(setting => {fieldset.append(labeled(input.checkbox(setting)))});
-  return fieldset;
+const section = {
+  gameDetails: () => {
+    const fieldset = fieldsetWithLegend("game-details");
+    const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
+    const playerCount = labeled(input.number("player-count", 2, 6, 1, 4));
+    const partyLevel = labeled(input.number("party-level", 1, 20, 1, 6));
+    const difficultyLevel = radioSet(["easy", "medium", "hard", "deadly"], "difficulty-level");
+    fieldset.append(sessionLength, playerCount, partyLevel, difficultyLevel)
+    return fieldset;
+  },
+  campaignSettings: () => {
+    const fieldset = fieldsetWithLegend("campaign-settings", "campaign settings (select any of interest)");
+    const settings = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
+    settings.forEach(setting => {
+      fieldset.append(labeled(input.checkbox(setting)));
+    });
+    return fieldset;
+  },
+  encounterBalance: () => {
+    const fieldset = fieldsetWithLegend("encounter-balance");
+    const encounters = ["combat", "exploration", "roleplay"];
+    encounters.forEach(encounter => {
+      const range = input.range(encounter, 1, Math.floor(100 / encounters.length));
+      fieldset.append(labeled(range));
+    });
+    fieldset.addEventListener("input", (e) => {
+      const rangeArray = Array.from(fieldset.querySelectorAll("input"));
+      const rangeCount = rangeArray.length;
+      const total = rangeArray.map((v) => Number(v.value)).reduce((a,b) => a + b);
+      const max = Math.floor(100 / rangeCount) * rangeCount;
+      const adjustment = Math.round(max - total) / (rangeCount - 1);
+      for (let i = 0; i < rangeCount; i++) {
+        if (i !== rangeArray.indexOf(e.target)) {
+          rangeArray[i].value = Number(rangeArray[i].value) + adjustment;
+        };
+      };
+    });
+    return fieldset;
+  },
+  gameMechanics: () => {
+    const mechanics = [
+      "spell-components",
+      "weight-encumberance",
+      "exhaustion",
+      "spell-slots",
+      "interplanar-travel",
+      "modern-technology"
+    ];
+
+    mechanics.forEach((mechanic) => {
+      const fieldset = fieldsetWithLegend(mechanic);
+      const options = ["yes", "no"];
+      options.forEach(option => {
+        fieldset.append(labeled(input.radio(mechanic, option, option.charAt(0))));
+      });
+
+  document.getElementById("mechanics-fieldset").append(fieldset);
+});
+
+  }
 };
 
-form.append(detailsSection(), environmentsSection());
+// const detailsSection = () => {
+//   const fieldset = fieldsetWithLegend("game-details");
+//   const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
+//   const playerCount = labeled(input.number("player-count", 2, 6, 1, 4));
+//   const partyLevel = labeled(input.number("party-level", 1, 20, 1, 6));
+//   const difficultyLevel = radioSet(["easy", "medium", "hard", "deadly"], "difficulty-level");
+//   fieldset.append(sessionLength, playerCount, partyLevel, difficultyLevel)
+//   return fieldset;
+// };
 
-const gameplayEncounters = [
-  "combat",
-  "exploration",
-  "roleplay"
-];
+// const environmentsSection = () => {
+//   const fieldset = fieldsetWithLegend("environments");
+//   const environments = ["any", "arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
+//   environments.forEach(setting => {fieldset.append(labeled(input.checkbox(setting)))});
+//   return fieldset;
+// };
 
-gameplayEncounters.forEach(encounter => {
-  const container = document.getElementById("encounter-balance-slider-display");
-  container.append(labeled(input.range(encounter, 1, 33)));
-});
+// const encountersSection = () => {
+//   const fieldset = fieldsetWithLegend("encounter-balance");
+//   const encounters = ["combat", "exploration", "roleplay"];
+//   encounters.forEach(encounter => {
+//     const range = input.range(encounter, 1, Math.floor(100 / encounters.length));
+//     fieldset.append(labeled(range));
+//   });
+//   return fieldset;
+// };
 
-const sliderGrid = document.getElementById("encounter-balance-slider-display");
-const allSliders = Array.from(sliderGrid.children).map((div) => div.lastChild);
+// const encounters = encountersSection();
 
-sliderGrid.addEventListener("input", (e) => {
-  const max = 99;
-  const allValues = allSliders.map((v) => Number(v.value));
-  const total = allValues.reduce((a,b) => a + b);
-  const adjustment = (max - total) / 2;
-  for (let i = 0; i < allSliders.length; i++) {
-    if (i !== allSliders.indexOf(e.target)) {
-      allSliders[i].value = Number(allSliders[i].value) + adjustment;
-    };
-  };
-});
+// encounters.addEventListener("input", (e) => {
+//   const allRanges = Array.from(encounters.querySelectorAll("input"));
+//   const rangeCount = allRanges.length;
+//   const totalValue = allRanges.map((v) => Number(v.value)).reduce((a,b) => a + b);
+//   const maxValue = Math.floor(100 / rangeCount) * rangeCount;
+//   const adjustment = Math.round(maxValue - totalValue) / (rangeCount - 1);
+//   for (let i = 0; i < rangeCount; i++) {
+//     if (i !== allRanges.indexOf(e.target)) {
+//       allRanges[i].value = Number(allRanges[i].value) + adjustment;
+//     };
+//   };
+// });
+
+form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance());
 
 const mechanics = [
   "spell-components",
   "weight-encumberance",
   "exhaustion",
-  "spell-slots"
+  "spell-slots",
+  "interplanar-travel"
 ];
 
 mechanics.forEach((mechanic) => {
