@@ -1,7 +1,88 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   background-color: #777;
+}
+
+form {
+  width: 30vw;
+  margin: 0 auto;
+}
+
+fieldset {
+  border: 0;
+  margin: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+legend {
+  font-weight: bold;
+  float: left;
+}
+
+label {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+input {
+  padding: 2px;
+  margin: 2px;
+}
+
+#game-details {
+  background-color: #BAD9B5;
+}
+
+#difficulty-level {
+  margin: 0;
+  background-color: #EFF7CF;
+  width: 350px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+
+#difficulty-level legend {
+  font-weight: 200;
+  grid-column: 1 / span 4;
+}
+
+#campaign-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: #F09F2D;
+}
+
+#campaign-settings legend {
+  grid-column: 1 / span 3;
+}
+
+#encounter-balance {
+  background-color: #FFD6E0;
+  align-items: flex-end;
+}
+
+#encounter-balance * {
+  width: fit-content;
+}
+
+#encounter-balance legend {
+  align-self: flex-start;
+}
+
+#game-mechanics {
+  background-color: #5BC0EB;
+}
+
+button {
+  margin: 25px;
 }

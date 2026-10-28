@@ -108,6 +108,7 @@ const section = {
     encounters.forEach(encounter => {
       const range = input.range(encounter, 1, Math.floor(100 / encounters.length));
       fieldset.append(labeled(range));
+      range.classList.add("range-input");
     });
     fieldset.addEventListener("input", (e) => {
       const rangeArray = Array.from(fieldset.querySelectorAll("input"));
@@ -134,14 +135,6 @@ const section = {
     ];
 
     return checkboxSet(mechanics, "game-mechanics");
-
-    // const options = ["yes", "no"];
-
-    // const fieldset = fieldsetWithLegend("game-mechanics");
-    // mechanics.forEach((mechanic) => {
-    //   fieldset.append(radioSet(options, mechanic));
-    // });
-    // return fieldset;
   }
 };
 
