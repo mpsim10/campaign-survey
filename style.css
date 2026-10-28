@@ -86,3 +86,7 @@ input {
 button {
   margin: 25px;
 }
+
+#slider-container {
+  margin: 0 auto;
+}

@@ -1,5 +1,3 @@
-// const form = document.forms["survey-form"];
-
 const form = document.createElement("form");
 form.id = "survey-form";
 
@@ -88,6 +86,20 @@ const checkboxSet = (arr, id, legendText) => {
   return fieldset;
 };
 
+function changeAllSliders(e, container, defaultValue) {
+  const allRanges = Array.from(container.querySelectorAll("input"));
+  const allValues = allRanges.map((v) => Number(v.value));
+  const currentTotal = allValues.reduce((a,b) => a + b);
+  const maxTotal = defaultValue * allValues.length;
+  const adjustment = Math.round(maxTotal - currentTotal) / (allValues.length - 1);
+  for (let i = 0; i < allValues.length; i++) {
+    if (i !== allRanges.indexOf(e.target)) {
+      allRanges[i].value = Number(allRanges[i].value) + adjustment;
+    };
+  };
+  return;
+};
+
 const section = {
   gameDetails: () => {
     const fieldset = fieldsetWithLegend("game-details");
@@ -104,26 +116,17 @@ const section = {
   },
   encounterBalance: () => {
     const fieldset = fieldsetWithLegend("encounter-balance");
+    const sliderContainer = document.createElement("div");
+    sliderContainer.id = "slider-container";
     const encounters = ["combat", "exploration", "roleplay"];
     const defaultValue = 50;
     encounters.forEach(encounter => {
       const range = input.range(encounter, 1, defaultValue);
-      fieldset.append(labeled(range));
       range.classList.add("range-input");
+      sliderContainer.append(labeled(range));
     });
-    fieldset.addEventListener("input", (e) => {
-      const allRanges = Array.from(fieldset.querySelectorAll("input"));
-      const rangeCount = allRanges.length;
-      const allValues = allRanges.map((v) => Number(v.value));
-      const currentTotal = allValues.reduce((a,b) => a + b);
-      const maxTotal = defaultValue * rangeCount;
-      const adjustment = Math.round(maxTotal - currentTotal) / (rangeCount - 1);
-      for (let i = 0; i < rangeCount; i++) {
-        if (i !== allRanges.indexOf(e.target)) {
-          allRanges[i].value = Number(allRanges[i].value) + adjustment;
-        };
-      };
-    });
+    fieldset.append(sliderContainer);
+    fieldset.addEventListener("input", (e) => changeAllSliders(e, fieldset, defaultValue));
     return fieldset;
   },
   gameMechanics: () => {
