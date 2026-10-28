@@ -105,20 +105,22 @@ const section = {
   encounterBalance: () => {
     const fieldset = fieldsetWithLegend("encounter-balance");
     const encounters = ["combat", "exploration", "roleplay"];
+    const defaultValue = 50;
     encounters.forEach(encounter => {
-      const range = input.range(encounter, 1, Math.floor(100 / encounters.length));
+      const range = input.range(encounter, 1, defaultValue);
       fieldset.append(labeled(range));
       range.classList.add("range-input");
     });
     fieldset.addEventListener("input", (e) => {
-      const rangeArray = Array.from(fieldset.querySelectorAll("input"));
-      const rangeCount = rangeArray.length;
-      const total = rangeArray.map((v) => Number(v.value)).reduce((a,b) => a + b);
-      const max = Math.floor(100 / rangeCount) * rangeCount;
-      const adjustment = Math.round(max - total) / (rangeCount - 1);
+      const allRanges = Array.from(fieldset.querySelectorAll("input"));
+      const rangeCount = allRanges.length;
+      const allValues = allRanges.map((v) => Number(v.value));
+      const currentTotal = allValues.reduce((a,b) => a + b);
+      const maxTotal = defaultValue * rangeCount;
+      const adjustment = Math.round(maxTotal - currentTotal) / (rangeCount - 1);
       for (let i = 0; i < rangeCount; i++) {
-        if (i !== rangeArray.indexOf(e.target)) {
-          rangeArray[i].value = Number(rangeArray[i].value) + adjustment;
+        if (i !== allRanges.indexOf(e.target)) {
+          allRanges[i].value = Number(allRanges[i].value) + adjustment;
         };
       };
     });
