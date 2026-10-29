@@ -50,7 +50,9 @@ const labeled = (input, labelText) => {
   const label = document.createElement("label");
   const name = input["name"];
   label["for"] = name;
-  label.textContent = labelText ? labelText : input["type"] === "radio" ? input["value"].split("-").join(" ") : name.split("-").join(" ");
+  label.textContent = labelText ? labelText 
+    : input["type"] === "radio" ? input["value"].split("-").join(" ") 
+    : name.split("-").join(" ");
   if (input["type"] === "radio" || input["type"] === "checkbox") {
     label.insertBefore(input, label.lastChild);
   } else {
@@ -97,10 +99,16 @@ function changeAllSliders(e, container, defaultValue) {
       allRanges[i].value = Number(allRanges[i].value) + adjustment;
     };
   };
+  styleLabelText(e.target.parentNode);
   return;
 };
 
-const section = {
+function styleLabelText(label) {
+  const childNodes = Array.from(label.childNodes);
+  console.log(object);
+};
+
+const sections = {
   gameDetails: () => {
     const fieldset = fieldsetWithLegend("game-details");
     const sessionLength = labeled(input.number("session-length", 2, 8, 0.5, 3, "session length (hours)"));
@@ -119,7 +127,7 @@ const section = {
     const sliderContainer = document.createElement("div");
     sliderContainer.id = "slider-container";
     const encounters = ["combat", "exploration", "roleplay"];
-    const defaultValue = 50;
+    const defaultValue = Math.floor(100 / encounters.length);
     encounters.forEach(encounter => {
       const range = input.range(encounter, 1, defaultValue);
       range.classList.add("range-input");
@@ -139,7 +147,10 @@ const section = {
       "modern-technology"
     ];
 
-    return checkboxSet(mechanics, "game-mechanics");
+    const checkboxes = checkboxSet(mechanics, "game-mechanics");
+
+    checkboxes.addEventListener("input", (e) => console.log(e.target.parentNode.childNodes));
+    return checkboxes;
   }
 };
 
@@ -150,7 +161,7 @@ const submitButton = () => {
   return button;
 };
 
-form.append(section.gameDetails(), section.campaignSettings(), section.encounterBalance(), section.gameMechanics(), submitButton());
+form.append(sections.gameDetails(), sections.campaignSettings(), sections.encounterBalance(), sections.gameMechanics(), submitButton());
 
 document.body.append(form);
 

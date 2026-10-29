@@ -9,7 +9,7 @@ body {
 }
 
 form {
-  width: 30vw;
+  width: 500px;
   margin: 0 auto;
 }
 
@@ -68,15 +68,20 @@ input {
 
 #encounter-balance {
   background-color: #FFD6E0;
-  align-items: flex-end;
-}
-
-#encounter-balance * {
-  width: fit-content;
+  justify-content: flex-end;
 }
 
 #encounter-balance legend {
   align-self: flex-start;
+}
+
+#encounter-balance label {
+  display: flex;
+  flex-direction: column;
+}
+
+.range-input {
+  width: 100%;
 }
 
 #game-mechanics {
@@ -85,8 +90,4 @@ input {
 
 button {
   margin: 25px;
-}
-
-#slider-container {
-  margin: 0 auto;
 }
